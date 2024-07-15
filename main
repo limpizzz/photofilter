@@ -1,0 +1,169 @@
+from PIL import Image 
+
+ 
+
+ 
+
+class Filter: 
+
+    """ 
+
+    Базовый класс для создания фильтров. 
+
+    """ 
+
+ 
+
+    def apply_to_pixel(self, r: int, g: int, b: int) -> (int, int, int): 
+
+        """ 
+
+ 
+
+        """ 
+
+        raise NotImplementedError() 
+
+ 
+
+    def apply_filter(self, img: Image.Image) -> Image.Image: 
+
+        for i in range(img.width): 
+
+            for j in range(img.height): 
+
+                r, g, b = img.getpixel((i, j)) 
+
+                new_r, new_g, new_b = self.apply_to_pixel(r, g, b) 
+
+                img.putpixel((i, j), (new_r, new_g, new_b)) 
+
+        return img 
+
+ 
+
+ 
+
+class RedFilter(Filter): 
+
+    def apply_to_pixel(self, r, g, b) -> (int, int, int): 
+
+        return r, 0, 0 
+
+ 
+
+ 
+
+class GreenFilter(Filter): 
+
+    def apply_to_pixel(self, r, g, b) -> (int, int, int): 
+
+        return 0, g, 0 
+
+ 
+
+ 
+
+class BlueFilter(Filter): 
+
+    def apply_to_pixel(self, r, g, b) -> (int, int, int): 
+
+        return 0, 0, b 
+
+ 
+
+ 
+
+def main(): 
+
+    filter_name = [ 
+
+        "Красный фильтр", 
+
+        "Зеленый фильтр", 
+
+        "Синий фильтр", 
+
+    ] 
+
+ 
+
+    filters = [RedFilter(),  GreenFilter(), BlueFilter()] 
+
+ 
+
+    print("Добро пожаловать в бесплатный консольный фоторедактор! (для цветных фотографий)") 
+
+    is_finished = False 
+
+    while not is_finished: 
+
+        path = input("Введите путь к файлу(в котором лежит фотография): ") 
+
+ 
+
+        img = Image.open(path).convert("RGB") 
+
+ 
+
+        print("Меню фильтров:") 
+
+        for i in range(len(filter_name)): 
+
+            print(f"{i} - {filter_name[i]}") 
+
+        print("3 : Выход") 
+
+ 
+
+        choice = input("Выберите фильтр (или 3 для выхода): ") 
+
+ 
+
+        if choice == "3": 
+
+            print("До свидания!") 
+
+            break 
+
+ 
+
+        while not choice.isdigit() or int(choice) >= len(filter_name): 
+
+            choice = input("Некорректный ввод. Попробуйте ещё раз: ") 
+
+ 
+
+        filt = filters[int(choice)] 
+
+        img = filt.apply_filter(img) 
+
+ 
+
+        save_path = input("Куда сохранить фотографию: ") 
+
+        img.save(save_path) 
+
+ 
+
+        answer = input("Ещё раз? (да/нет): ").lower() 
+
+ 
+
+        while answer != "да" and answer != "нет": 
+
+            answer = input("Неккорректный ввод. Попробуйте ещё раз: ").lower() 
+
+ 
+
+        is_finished = answer != "да" 
+
+ 
+
+ 
+
+if __name__ == "__main__": 
+
+    main() 
+
+ 
