@@ -5,23 +5,7 @@ from PIL import Image
  
 
 class Filter: 
-
-    """ 
-
-    Базовый класс для создания фильтров. 
-
-    """ 
-
- 
-
     def apply_to_pixel(self, r: int, g: int, b: int) -> (int, int, int): 
-
-        """ 
-
- 
-
-        """ 
-
         raise NotImplementedError() 
 
  
